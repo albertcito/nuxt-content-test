@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { UAlert } from '#components';
+import getImageURL from '~/util/getImageURL';
 
 const collection = "all";
 const type = ["article"];
@@ -51,7 +52,7 @@ const { data: total } = useAsyncData(
       >
         <div class="min-h-[100px] bg-gray-200">
           <img
-            :src="`https://picsum.photos/id/${(Math.abs(article.id.split('').reduce((a,b) => ((a << 5) + a) + b.charCodeAt(0), 0)) + '').substring(0,2)}/800/500`"
+            :src="getImageURL(article.id)"
             alt="Article Image"
             class="w-full h-auto mb-4"
           />

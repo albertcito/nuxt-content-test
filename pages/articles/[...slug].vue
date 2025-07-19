@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import getImageURL from '~/util/getImageURL';
+
 const route = useRoute();
 const { data: article, status } = await useAsyncData(route.path, () =>
 	queryCollection("all").path(route.path).first(),
@@ -21,7 +23,7 @@ const { data: article, status } = await useAsyncData(route.path, () =>
       {{ article.date }}
     </div>
     <div class="prose mx-auto">
-      <img :src="article.image" alt="Article Image" class="w-full h-auto mb-4" />
+      <img :src="getImageURL(article.id)" alt="Article Image" class="w-full h-auto mb-4" />
       <ContentRenderer
         v-if="article.body"
         :value="article"
