@@ -2,9 +2,9 @@
 import getImageURL from '~/util/getImageURL';
 
 const collection = "all";
-const type = ["article"];
+const type = "article";
 
-const itemsPerPage = 9;
+const itemsPerPage = 6;
 const tagsString = '';
 
 const route = useRoute();
@@ -13,11 +13,11 @@ const totalSkip = computed(() => (page.value - 1) * itemsPerPage);
 const { data: articles } =  useAsyncData(
   computed(
     () =>
-      `${collection}_${tagsString}_${type.join(",")}_${page.value}_${totalSkip.value}_${itemsPerPage}`,
+      `${collection}_${tagsString}_${type}_${page.value}_${totalSkip.value}_${itemsPerPage}`,
   ),
   () => {
     const query = queryCollection(collection)
-      .where("type", "IN", type)
+      .where("type", "=", type)
       .order("date", "DESC")
       .skip(totalSkip.value)
       .limit(itemsPerPage);
@@ -28,10 +28,10 @@ const { data: articles } =  useAsyncData(
 
 const { data: total } = useAsyncData(
 		computed(
-			() => `total_${collection}_${type.join(",")}`,
+			() => `total_${collection}_${type}`,
 		),
 		() => {
-			const query = queryCollection(collection).where("type", "IN", type);
+			const query = queryCollection(collection).where("type", "=", type);
 			return query.count();
 		},
 		{ lazy: true }
@@ -41,7 +41,7 @@ const { data: total } = useAsyncData(
 <template>
 	<div>
 		<h1 class="text-2xl font-bold text-center mb-4">
-      Test Page index
+      Test Page (total: {{ total }} articles)
     </h1>
     <div class="grid sm:grid-cols-2  lg:grid-cols-3 gap-4 mb-4">
       <div
