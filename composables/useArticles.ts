@@ -53,8 +53,7 @@ export const useArticles =  ({
 				});
 			}
 			return query.count();
-		},
-		{ lazy: true }
+		}
 	);
 
 	return {

@@ -1,18 +1,42 @@
 <script setup lang="ts">
 import { UAlert } from '#components';
-import { useArticles } from '~/composables/useArticles';
 import getImageURL from '~/util/getImageURL';
 
+const collection = "all";
 const type = computed(() => ["article"]);
-const itemsPerPage = computed(() => 3);
+
+const itemsPerPage = computed(() => 9);
+const tagsString = '';
+
 const route = useRoute();
 const page = computed(() => route.query.page ? Number(route.query.page) : 1);
+const totalSkip = computed(() => (page.value - 1) * itemsPerPage.value);
+const { data: articles } =  useAsyncData(
+  computed(
+    () =>
+      `${collection}_${tagsString}_${type.value.join(",")}_${page.value}_${totalSkip.value}_${itemsPerPage.value}`,
+  ),
+  () => {
+    const query = queryCollection(collection)
+      .where("type", "IN", type.value)
+      .order("date", "DESC")
+      .skip(totalSkip.value)
+      .limit(itemsPerPage.value);
 
-const { articles, total, totalSkip } = useArticles({
-  page,
-  itemsPerPage,
-  type,
-});
+    return query.all();
+  }
+);
+
+const { data: total } = useAsyncData(
+		computed(
+			() => `total_${collection}_${type.value.join(",")}`,
+		),
+		() => {
+			const query = queryCollection(collection).where("type", "IN", type.value);
+			return query.count();
+		},
+		{ lazy: true }
+	);
 </script>
 
 <template>
@@ -22,7 +46,7 @@ const { articles, total, totalSkip } = useArticles({
     </h1>
     <div class="grid sm:grid-cols-2  lg:grid-cols-3 gap-4 mb-4">
       <div
-        v-for="(article, index) in articles.data.value"
+        v-for="(article, index) in articles"
         :key="article.id"
         class="border border-gray-200 rounded-md relative"
       >
