@@ -12,7 +12,7 @@ const { data: article, status } = await useAsyncData(route.path, () =>
     <div
       class="text-2xl font-bold text-center mb-4"
     >
-      Article not found
+      Article not found 🤷
     </div>
   </template>
   <div v-else-if="article">
