@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { UAlert } from '#components';
 import getImageURL from '~/util/getImageURL';
 
 const collection = "all";
-const type = computed(() => ["article"]);
+const type = ["article"];
 
 const itemsPerPage = computed(() => 9);
 const tagsString = '';
@@ -14,11 +13,11 @@ const totalSkip = computed(() => (page.value - 1) * itemsPerPage.value);
 const { data: articles } =  useAsyncData(
   computed(
     () =>
-      `${collection}_${tagsString}_${type.value.join(",")}_${page.value}_${totalSkip.value}_${itemsPerPage.value}`,
+      `${collection}_${tagsString}_${type.join(",")}_${page.value}_${totalSkip.value}_${itemsPerPage.value}`,
   ),
   () => {
     const query = queryCollection(collection)
-      .where("type", "IN", type.value)
+      .where("type", "IN", type)
       .order("date", "DESC")
       .skip(totalSkip.value)
       .limit(itemsPerPage.value);
@@ -29,10 +28,10 @@ const { data: articles } =  useAsyncData(
 
 const { data: total } = useAsyncData(
 		computed(
-			() => `total_${collection}_${type.value.join(",")}`,
+			() => `total_${collection}_${type.join(",")}`,
 		),
 		() => {
-			const query = queryCollection(collection).where("type", "IN", type.value);
+			const query = queryCollection(collection).where("type", "IN", type);
 			return query.count();
 		},
 		{ lazy: true }
