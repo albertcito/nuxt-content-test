@@ -1,1 +1,0 @@
-import{_ as t,d as s,e as o,C as a}from"./BRrRme8Q.js";const c={},r={class:"mx-auto max-w-7xl px-10 py-10"};function n(e,_){return o(),s("div",r,[a(e.$slots,"default")])}const d=t(c,[["render",n]]);export{d as default};
