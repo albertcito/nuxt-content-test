@@ -58,7 +58,7 @@ const { data: total } = useAsyncData(
         </div>
         <div class="px-4 py-2">
           <h2 class="text-lg font-bold mb-2">
-            <a :href="article.path" class="text-blue-500 hover:text-blue-700 absolute top-0 left-0 w-full h-full" />
+            <NuxtLink :to="article.path" class="text-blue-500 hover:text-blue-700 absolute top-0 left-0 w-full h-full" />
             {{ article.title }}
           </h2>
           <p class="text-sm text-gray-500 mb-2">
