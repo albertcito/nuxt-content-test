@@ -5,7 +5,6 @@ const collection = "all";
 const type = "article";
 
 const itemsPerPage = 6;
-const tagsString = '';
 
 const route = useRoute();
 const page = computed(() => route.query.page ? Number(route.query.page) : 1);
@@ -13,7 +12,7 @@ const totalSkip = computed(() => (page.value - 1) * itemsPerPage);
 const { data: articles } =  useAsyncData(
   computed(
     () =>
-      `${collection}_${tagsString}_${type}_${page.value}_${totalSkip.value}_${itemsPerPage}`,
+      `${collection}_${type}_${page.value}_${totalSkip.value}_${itemsPerPage}`,
   ),
   () => {
     const query = queryCollection(collection)
