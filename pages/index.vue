@@ -1,42 +1,18 @@
 <script setup lang="ts">
 import { UAlert } from '#components';
+import { useArticles } from '~/composables/useArticles';
 import getImageURL from '~/util/getImageURL';
 
-const collection = "all";
-const type = ["article"];
-
-const itemsPerPage = 9;
-const tagsString = '';
-
+const type = computed(() => ["article"]);
+const itemsPerPage = computed(() => 3);
 const route = useRoute();
 const page = computed(() => route.query.page ? Number(route.query.page) : 1);
-const totalSkip = computed(() => (page.value - 1) * itemsPerPage);
-const { data: articles } =  useAsyncData(
-  computed(
-    () =>
-      `${collection}_${tagsString}_${type.join(",")}_${page.value}_${totalSkip.value}_${itemsPerPage}`,
-  ),
-  () => {
-    const query = queryCollection(collection)
-      .where("type", "IN", type)
-      .order("date", "DESC")
-      .skip(totalSkip.value)
-      .limit(itemsPerPage);
 
-    return query.all();
-  }
-);
-
-const { data: total } = useAsyncData(
-		computed(
-			() => `total_${collection}_${type.join(",")}`,
-		),
-		() => {
-			const query = queryCollection(collection).where("type", "IN", type);
-			return query.count();
-		},
-		{ lazy: true }
-	);
+const { articles, total, totalSkip } = useArticles({
+  page,
+  itemsPerPage,
+  type,
+});
 </script>
 
 <template>
@@ -46,7 +22,7 @@ const { data: total } = useAsyncData(
     </h1>
     <div class="grid sm:grid-cols-2  lg:grid-cols-3 gap-4 mb-4">
       <div
-        v-for="(article, index) in articles"
+        v-for="(article, index) in articles.data.value"
         :key="article.id"
         class="border border-gray-200 rounded-md relative"
       >
